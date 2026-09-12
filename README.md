@@ -10,7 +10,7 @@ Explore the available packages and integrate them into your Qwic projects to acc
 
 ## 🛠️ Development
 
-Packages in this hub are built using the Qwic language. For detailed information on the language specifications and build process, refer to the core [QwicLang repository](../../qwiclang).
+Packages in this hub are built using the Qwic language. For detailed information on the language specifications and build process, refer to the core [QwicLang repository](https://github.com/QwicLang/qwiclang).
 
 ## 🤝 Contributing
 
