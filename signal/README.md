@@ -1,47 +1,55 @@
-# 📡 Signal
+# Signal
 
-`signal` is a robust, high-performance web framework for the Qwic language. It combines the simplicity of Flask with the type safety and robustness of FastAPI.
+Signal is the HTTP routing package for Qwic. It provides function-based routes,
+typed path parameters, JSON request validation, and structured responses on top
+of Qwic's native HTTP/1.1 runtime.
 
-## 🚀 Quick Start
+## Install
+
+```bash
+qwic install signal
+```
+
+Packages are installed once in the shared Qwic package directory and can then
+be imported by any project.
+
+## Example
 
 ```qwic
 import signal
 
-func getUser(req) {
-    const id = req.params.id
-    return signal.Response.new(200, { 
-        userId: id, 
-        name: "Qwic User " + id.to_string() 
+public func getUser(req: signal.Request): any {
+    const id = req.params["id"]
+    return signal.Response.new(200, {
+        "userId": id,
+        "name": "Qwic User " + id.to_string(),
     })
-}
-
-func createItem(req) {
-    const data = req.body.validate({ 
-        title: "string", 
-        priority: "int" 
-    })
-    return signal.Response.new(201, { status: "created", item: data })
 }
 
 public func main() {
     const app = signal.App.new()
-
     app.routes([
-        { path: "/user/{id:int}", method: "GET", handler: getUser },
-        { path: "/item",          method: "POST", handler: createItem },
+        {"path": "/user/{id:int}", "method": "GET", "handler": getUser},
     ])
-
-    app.run(port: 8080)
+    app.run(8080)
 }
 ```
 
-## ✨ Features
+## Request Validation
 
-- **Function-Based Routing**: Clean separation of route configuration and business logic.
-- **Type-Safe Parameters**: Automatic casting of path parameters (e.g., `{id:int}`).
-- **Robust Validation**: Built-in request body validation to ensure data integrity.
-- **High Performance**: Asynchronous core designed for micro-services and APIs.
+```qwic
+public func createItem(req: signal.Request): any {
+    try {
+        const data = req.body.validate({"title": "string", "priority": "int"})
+        return signal.Response.new(201, {"status": "created", "item": data})
+    } catch (error) {
+        return signal.Response.new(400, {"error": error})
+    }
+}
+```
 
-## 🛠️ Installation
+## Current Runtime Limits
 
-(Installation instructions will be added once the build system is finalized)
+Signal currently uses Qwic's synchronous HTTP/1.1 listener. TLS, streaming,
+keep-alive, chunked request bodies, concurrent request handling, middleware,
+and graceful shutdown are not implemented yet.

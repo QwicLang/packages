@@ -12,26 +12,26 @@ public type Body {
     raw: string
 }
 
-public func Body.validate(schema: map) -> map {
-    const data = json.parse(this.raw)
+public func (body: Body) validate(schema: map): map {
+    const data = json.parse(body.raw)
     
     for key in schema.keys() {
         const expectedType = schema[key]
         const actualValue = data[key]
         
         if actualValue == null {
-            throw signal.ValidationError("Missing required field: " + key)
+            throw "Missing required field: " + key
         }
         
         // Type checking logic
         if expectedType == "int" && actualValue.type != "int" {
-            throw signal.ValidationError("Field " + key + " must be an integer")
+            throw "Field " + key + " must be an integer"
         }
         if expectedType == "string" && actualValue.type != "string" {
-            throw signal.ValidationError("Field " + key + " must be a string")
+            throw "Field " + key + " must be a string"
         }
         if expectedType == "bool" && actualValue.type != "bool" {
-            throw signal.ValidationError("Field " + key + " must be a boolean")
+            throw "Field " + key + " must be a boolean"
         }
     }
     
